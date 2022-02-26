@@ -10,149 +10,127 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return WillPopScope(
+      onWillPop: () {
+        return null;
+      },
+      child: ListView(
         children: [
-          Align(
-            alignment: AlignmentDirectional(0, 0),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xFFEEEEEE),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: Image.asset(
-                    'assets/bgProfile.png',
-                  ).image,
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional(-0.01, -0.45),
-            child: Container(
-              width: 110,
-              height: 110,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: Image.network(
-                'https://picsum.photos/seed/642/600',
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(80, 320, 80, 0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
+          Column(
+            children: [
+              //// Header
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+                height: 220,
+                margin: EdgeInsets.only(bottom: defaultMargin),
+                width: double.infinity,
+                color: Color(0x49D958),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Intan Dewi Hapsari',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+                    Container(
+                      width: 110,
+                      height: 110,
+                      margin: EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/photo_border.png'))),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    (BlocProvider.of<UserCubit>(context).state
+                                            as UserLoaded)
+                                        .user
+                                        .picturePath),
+                                fit: BoxFit.cover)),
                       ),
                     ),
                     Text(
-                      'intandewihapsari@gmail.com',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      (BlocProvider.of<UserCubit>(context).state as UserLoaded)
+                          .user
+                          .name,
+                      style: GoogleFonts.poppins(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      (BlocProvider.of<UserCubit>(context).state as UserLoaded)
+                          .user
+                          .email,
+                      style:
+                          greyFontStyle.copyWith(fontWeight: FontWeight.w300),
                     )
                   ],
                 ),
-                ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(36, 500, 36, 0),
-            child: Container(
-              width: double.infinity,
-              height: 40,
-              decoration: BoxDecoration(
+              ),
+              //// Body
+              Container(
+                width: double.infinity,
                 color: Colors.white,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                    child: Text(
-                      'Pengaturan Profile',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                      ),
+                child: Column(
+                  children: [
+                    CustomTabBar(
+                      titles: ["Akun", "Diengku"],
+                      selectedIndex: selectedIndex,
+                      onTap: (index) {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(155, 0, 0, 0),
-                    child: Icon(
-                      Icons.navigate_next,
-                      color: Colors.black,
-                      size: 24,
+                    SizedBox(
+                      height: 16,
                     ),
-                  )
-                ],
+                    Column(
+                      children: ((selectedIndex == 0)
+                              ? [
+                                  'Edit Profile',
+                                  'Home Address',
+                                  'Security',
+                                  'Payment',
+                                ]
+                              : [
+                                  'Rate App',
+                                  'Help Center',
+                                  'Privacy & Policy',
+                                  'Term & Condition'
+                                ])
+                          .map((e) => Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 16,
+                                    left: defaultMargin,
+                                    right: defaultMargin),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      e,
+                                      style: blackFontStyle3,
+                                    ),
+                                    SizedBox(
+                                      height: 24,
+                                      width: 24,
+                                      child: Image.asset(
+                                        'assets/right_arrow.png',
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(36, 546, 36, 0),
-            child: Container(
-              width: double.infinity,
-              height: 40,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                    child: Text(
-                      'Ganti Kata Sandi',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(165, 0, 0, 0),
-                    child: Icon(
-                      Icons.navigate_next,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(36, 592, 36, 0),
-            child: Container(
-              width: double.infinity,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              ),
-          ),
-          Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(76, 650, 16, 0),
-              child: ButtonTheme(
-                minWidth: 250.0,
-                height: 40.0,
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(top: 24),
+                height: 45,
+                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
                 child: RaisedButton(
                   onPressed: () {
                     Get.to(SignInPage());
@@ -167,7 +145,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.white, fontWeight: FontWeight.w500),
                   ),
                 ),
-              ))
+              ),
+              SizedBox(
+                height: 40,
+              )
+            ],
+          )
         ],
       ),
     );
